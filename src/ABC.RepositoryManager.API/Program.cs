@@ -1,5 +1,6 @@
 
 using ABC.RepositoryManager.API.Middlewares;
+using ABC.RepositoryManager.API.Setup;
 
 namespace ABC.RepositoryManager.API
 {
@@ -15,6 +16,7 @@ namespace ABC.RepositoryManager.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddApiConfig(builder.Configuration);
 
             var app = builder.Build();
 
