@@ -1,4 +1,6 @@
 
+using ABC.RepositoryManager.API.Middlewares;
+
 namespace ABC.RepositoryManager.API
 {
     public class Program
@@ -22,6 +24,7 @@ namespace ABC.RepositoryManager.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
