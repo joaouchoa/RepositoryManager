@@ -42,7 +42,6 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Queries.GetRep
             }).ToList();
 
             var result = new GetRepoByNameQueryResponse(
-                HasMorePages: response.HasMorePages,
                 finalPage: response.TotalPages,
                 Repositories: repositories,
                 Errors: null

@@ -5,6 +5,6 @@ namespace ABC.RepositoryManager.Application.Contracts
 {
     public interface IReposReadRepository
     {
-        Task<GetRepoByNameGitHubResponse> GetByRepositoryByNameAsync(string? repoName, int page, int perPage, ERepoSortBy SortBy);
+        Task<GetRepoByNameGitHubResponse> GetByRepositoryByNameAsync(string? repoName, int page, int perPage, ERepoSortBy? SortBy);
     }
 }

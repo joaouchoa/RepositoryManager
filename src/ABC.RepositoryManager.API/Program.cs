@@ -17,6 +17,7 @@ namespace ABC.RepositoryManager.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddApiConfig(builder.Configuration);
+            builder.Services.AddHttpClient();
 
             var app = builder.Build();
 
