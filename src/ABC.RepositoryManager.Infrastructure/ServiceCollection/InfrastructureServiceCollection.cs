@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ABC.RepositoryManager.Application.Contracts;
+using ABC.RepositoryManager.Infrastructure.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ABC.RepositoryManager.Infrastructure.ServiceCollection
 {
@@ -11,6 +8,8 @@ namespace ABC.RepositoryManager.Infrastructure.ServiceCollection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
+            services.AddScoped<IReposReadRepository, ReposReadRepository>();
+
             return services;
         }
     }

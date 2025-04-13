@@ -1,10 +1,11 @@
 ﻿using ABC.RepositoryManager.Application.Contracts;
 using ABC.RepositoryManager.Domain.Entities;
+using ABC.RepositoryManager.Domain.Utils;
 using MediatR;
 
 namespace ABC.RepositoryManager.Application.Features.Repositories.Queries.GetRepoByName
 {
-    public class GetRepoByNameQueryHandler : IRequestHandler<GetRepoByNameQuery, GetRepoByNameQueryResponse>
+    public class GetRepoByNameQueryHandler : IRequestHandler<GetRepoByNameQuery, Result<GetRepoByNameQueryResponse>>
     {
         private readonly GetRepoByNameQueryValidation _validator;
         private readonly IReposReadRepository _repository;
@@ -15,22 +16,17 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Queries.GetRep
             _repository = repository;
         }
 
-        public async Task<GetRepoByNameQueryResponse> Handle(GetRepoByNameQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetRepoByNameQueryResponse>> Handle(GetRepoByNameQuery request, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(request);
-            
+
             if (!validationResult.IsValid)
-                return new GetRepoByNameQueryResponse(false, default, default, validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+                return Result<GetRepoByNameQueryResponse>.BadRequest(validationResult.Errors.Select(e => e.ErrorMessage).ToArray());
 
             var response = await _repository.GetByRepositoryByNameAsync(request.RepoName, request.Page, request.PerPage, request.SortBy);
 
             if (response is null || response.Repositories.Count == 0)
-                return new GetRepoByNameQueryResponse(
-                    HasMorePages: false,
-                    finalPage: 0,
-                    Repositories: new List<Repo>(),
-                    Errors: null
-                );
+                return Result<GetRepoByNameQueryResponse>.NotFound("No repositories found.");
 
             var repositories = response.Repositories.Select(repo => new Repo
             {
@@ -45,7 +41,14 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Queries.GetRep
                 Watchers = repo.WatchersCount
             }).ToList();
 
-            return new GetRepoByNameQueryResponse(response.HasMorePages, response.TotalPages, repositories, default);
+            var result = new GetRepoByNameQueryResponse(
+                HasMorePages: response.HasMorePages,
+                finalPage: response.TotalPages,
+                Repositories: repositories,
+                Errors: null
+            );
+
+            return Result<GetRepoByNameQueryResponse>.Sucess(result);
         }
     }
 }
