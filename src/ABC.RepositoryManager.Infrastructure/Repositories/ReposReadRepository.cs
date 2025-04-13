@@ -42,6 +42,34 @@ namespace ABC.RepositoryManager.Infrastructure.Repositories
                 PropertyNameCaseInsensitive = true
             });
 
+            if (body is null || body.Repositories is null || !body.Repositories.Any())
+                return new GetRepoByNameGitHubResponse(0, new List<RepositoryGitHubResponse>(), page);
+
+            // Por padrão o Github já tem a sua relevância que considera o match do nome e numero de estrelas como prioridade alta,
+            // popularidade do dono do repositorio e frequência de atualizações como prioridade média e quantidade forks como prioridade baixa,
+            // por exemplo. Então vou aplicar uma especificação de prioridade considerando esse fator padrão do github na busca de repositorios,
+            // quando for uma busca sem filtros, ou seja, o Enum ERepoSortBy vier null, vou 
+            // definir notas de peso para algumas carateriticas fornecidade pela API publica, faço a soma desses pessos, assim gerando uma nota para
+            // os repositorios, depois ordenando eles com base nessa nota. Entendo que não é extremamente preciso, pois estou aplicando o calculo
+            // somente no arranjo amostral da paginação, mas acredito que seja um alternativa boa para o requisito.
+            if (sortBy == null)
+            {
+                // Calculo de relevância
+                // Estrelas: peso 2.0 
+                // Forks: peso 1.5 
+                // Watchers: peso 1.0 
+
+                body = body with
+                {
+                    Repositories = body.Repositories
+                        .OrderByDescending(r =>
+                            (r.StargazersCount * 2.0) +
+                            (r.ForksCount * 1.5) +
+                            (r.WatchersCount * 1.0)
+                        ).ToList()
+                };
+            }
+
             response.Headers.TryGetValues("Link", out var linkHeaders);
             var linkHeader = linkHeaders?.FirstOrDefault();
 
