@@ -11,6 +11,7 @@ namespace ABC.RepositoryManager.Infrastructure.ServiceCollection
         {
             services.AddScoped<ReposManagerContext>();
             services.AddScoped<IReposReadRepository, ReposReadRepository>();
+            services.AddScoped<IReposWriteRepository, ReposWriteRepository>();
 
             return services;
         }

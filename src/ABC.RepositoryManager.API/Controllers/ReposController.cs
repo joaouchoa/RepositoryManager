@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ABC.RepositoryManager.Application.Features.Repositories.Queries.GetRepoByName;
+using ABC.RepositoryManager.Application.Features.Repositories.Commands.CreateFavoriteRepo;
 
 namespace ABC.RepositoryManager.API.Controllers
 {
@@ -15,11 +16,18 @@ namespace ABC.RepositoryManager.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("search", Name = "GetReposByName")]
         public async Task<IActionResult> GetReposByNameAsync([FromQuery] GetRepoByNameQuery query)
         {
             var response = await _mediator.Send(query, HttpContext.RequestAborted);
             return response.ToActionResult(); 
+        }
+
+        [HttpPost("favorite", Name = "CreateFavoriteRepo")]
+        public async Task<IActionResult> CreateRepoAsync([FromBody] CreateFavoriteRepoCommand repository)
+        {
+            var response = await _mediator.Send(repository, HttpContext.RequestAborted);
+            return response.ToActionResult();
         }
     }
 }
