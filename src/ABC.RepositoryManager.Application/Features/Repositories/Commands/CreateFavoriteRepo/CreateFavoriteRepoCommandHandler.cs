@@ -37,7 +37,7 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Commands.Creat
                 request.Watchers
             );
 
-            var result = await _repository.CreateFavoriteRepo(favorite);
+            var result = await _repository.CreateFavoriteRepoAsync(favorite);
 
             if (result != ERepoCreationStatus.Success)
             {

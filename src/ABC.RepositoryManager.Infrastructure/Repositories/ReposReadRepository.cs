@@ -1,8 +1,10 @@
 ﻿using ABC.RepositoryManager.Application.Contracts;
 using ABC.RepositoryManager.Application.Features.Repositories.DTOs;
+using ABC.RepositoryManager.Domain.Entities;
 using ABC.RepositoryManager.Domain.Enums;
 using ABC.RepositoryManager.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -88,6 +90,42 @@ namespace ABC.RepositoryManager.Infrastructure.Repositories
             {
                 TotalPages = lastPage
             };
+        }
+
+        public async Task<List<Repo>> GetFavoriteReposAsync(int page, int perPage, ERepoSortBy? SortBy)
+        {
+            var query = _context.Repos.AsQueryable();
+
+            if (SortBy is null)
+            {
+                // Calcula a "nota de relevância" baseada nos pesos, semelhante ao da listagem por nome, a diferença 
+                // é que aqui como tenho ciencia de todos os registros eu posso aplicar a relevancia para todos os registros.
+                query = query
+                    .OrderByDescending(r =>
+                        (r.Stargazers * 2.0) +
+                        (r.Forks * 1.5) +
+                        (r.Watchers * 1.0)
+                    );
+            }
+            else
+            {
+                query = SortBy switch
+                {
+                    ERepoSortBy.Stars => query.OrderByDescending(r => r.Stargazers),
+                    ERepoSortBy.Forks => query.OrderByDescending(r => r.Forks),
+                    _ => query.OrderByDescending(r => r.Stargazers)
+                };
+            }
+
+            return await query
+                .Skip((page - 1) * perPage)
+                .Take(perPage)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetFavoriteReposCountAsync()
+        {
+            return await _context.Repos.CountAsync();
         }
 
         private int ExtractLastPageNumber(string linkHeader, int currentPage)

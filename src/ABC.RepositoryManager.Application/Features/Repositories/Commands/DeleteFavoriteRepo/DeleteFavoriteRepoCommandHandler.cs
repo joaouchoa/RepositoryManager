@@ -26,7 +26,7 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Commands.Delet
             if (!validatorResult.IsValid)
                 return Result.BadRequest(validatorResult.Errors.Select(e => e.ErrorMessage).ToArray());
 
-            var response = await _repository.DeleteFavoriteRepo(request.Id);
+            var response = await _repository.DeleteFavoriteRepoAsync(request.Id);
 
             if (!response)
                 return Result.BadRequest(ValidationMessages.RepoValidationMessages.FAVORITE_REPO_DONT_DELETED_ERROR_MESSAGE);

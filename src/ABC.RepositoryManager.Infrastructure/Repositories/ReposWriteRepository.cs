@@ -17,7 +17,7 @@ namespace ABC.RepositoryManager.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<ERepoCreationStatus> CreateFavoriteRepo(Repo repository)
+        public async Task<ERepoCreationStatus> CreateFavoriteRepoAsync(Repo repository)
         {
             var exists = await _reposReadRepository.ExistsFavoriteRepoByIdAsync(repository.Id);
 
@@ -33,7 +33,7 @@ namespace ABC.RepositoryManager.Infrastructure.Repositories
             return ERepoCreationStatus.Success;
         }
 
-        public async Task<bool> DeleteFavoriteRepo(int id)
+        public async Task<bool> DeleteFavoriteRepoAsync(int id)
         {
             var deletedCount = await _context.Repos
                  .Where(d => d.Id == id)

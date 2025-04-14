@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ABC.RepositoryManager.Application.Features.Repositories.Queries.GetRepoByName;
 using ABC.RepositoryManager.Application.Features.Repositories.Commands.CreateFavoriteRepo;
 using ABC.RepositoryManager.Application.Features.Repositories.Commands.DeleteFavoriteRepo;
+using ABC.RepositoryManager.Application.Features.Repositories.Queries.GetFavoriteRepos;
 
 namespace ABC.RepositoryManager.API.Controllers
 {
@@ -31,10 +32,17 @@ namespace ABC.RepositoryManager.API.Controllers
             return response.ToActionResult();
         }
 
-        [HttpDelete("remove-favorite", Name = "DeleteRepoAsync")]
+        [HttpDelete("remove-favorite", Name = "DeleteRepo")]
         public async Task<IActionResult> DeleteRepoAsync([FromBody] DeleteFavoriteRepoCommand repository)
         {
             var response = await _mediator.Send(repository, HttpContext.RequestAborted);
+            return response.ToActionResult();
+        }
+
+        [HttpGet("favorite-repositories", Name = "GetfavoriteRepos")]
+        public async Task<IActionResult> GetFavoritesRepos([FromQuery] GetFavoriteReposQuery query)
+        {
+            var response = await _mediator.Send(query, HttpContext.RequestAborted);
             return response.ToActionResult();
         }
     }
