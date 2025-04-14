@@ -11,7 +11,7 @@
         public const string CONSECUTIVE_HYPHENS_ERROR_MESSAGE = "{PropertyName} cannot contain two consecutive hyphens.";
         public const string REPO_CREATED_MESSAGE = "Repository created successfully.";
         public const string REPO_DONT_CREATED_ERROR_MESSAGE = "Failed to create the repository.";
-        public const string REPO_ALREADY_EXISTS_ERROR_MESSAGE = "Repository already exists.";
+        public const string REPO_ALREADY_EXISTS_ERROR_MESSAGE = "Repository already favorited.";
         public const string FAVORITE_REPO_DELETED_ERROR_MESSAGE = "The Favorite Repository was removed.";
         public const string FAVORITE_REPO_DONT_DELETED_ERROR_MESSAGE = "Failed to remove the Favorite Repository.";
     }

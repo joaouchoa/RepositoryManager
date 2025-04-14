@@ -109,11 +109,17 @@ namespace ABC.RepositoryManager.Infrastructure.Repositories
             }
             else
             {
+                // a organização por mais recente não funciona aqui, ela é substituida pela ordenação por Watchers
                 query = SortBy switch
                 {
                     ERepoSortBy.Stars => query.OrderByDescending(r => r.Stargazers),
                     ERepoSortBy.Forks => query.OrderByDescending(r => r.Forks),
-                    _ => query.OrderByDescending(r => r.Stargazers)
+                    ERepoSortBy.Watchers => query.OrderByDescending(r => r.Watchers),
+                    _ => query.OrderByDescending(r =>
+                        (r.Stargazers * 2.0) +
+                        (r.Forks * 1.5) +
+                        (r.Watchers * 1.0)
+                    )
                 };
             }
 

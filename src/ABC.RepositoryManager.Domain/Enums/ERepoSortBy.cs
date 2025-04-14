@@ -10,6 +10,7 @@ namespace ABC.RepositoryManager.Domain.Enums
     {
         Stars,
         Forks,
-        Updated
+        Updated,
+        Watchers
     }
 }
