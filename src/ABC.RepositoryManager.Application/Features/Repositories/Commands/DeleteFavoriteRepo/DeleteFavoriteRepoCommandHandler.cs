@@ -29,9 +29,9 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Commands.Delet
             var response = await _repository.DeleteFavoriteRepoAsync(request.Id);
 
             if (!response)
-                return Result.BadRequest(ValidationMessages.RepoValidationMessages.FAVORITE_REPO_DONT_DELETED_ERROR_MESSAGE);
+                return Result.NotFound(ValidationMessages.RepoValidationMessages.FAVORITE_REPO_DONT_DELETED_ERROR_MESSAGE);
 
-            return Result.Created();
+            return Result.NoContent();
         }
     }
 }

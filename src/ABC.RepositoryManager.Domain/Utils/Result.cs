@@ -64,6 +64,14 @@ namespace ABC.RepositoryManager.Domain.Utils
             };
         }
 
+        public static Result NoContent()
+        {
+            return new Result
+            {
+                StatusCode = HttpStatusCode.NoContent
+            };
+        }
+
         public static Result NotFound()
         {
             return new Result
