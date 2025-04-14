@@ -1,6 +1,8 @@
 ﻿using ABC.RepositoryManager.Application.Contracts;
 using ABC.RepositoryManager.Application.Features.Repositories.DTOs;
 using ABC.RepositoryManager.Domain.Enums;
+using ABC.RepositoryManager.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -9,10 +11,17 @@ namespace ABC.RepositoryManager.Infrastructure.Repositories
     public class ReposReadRepository : IReposReadRepository
     {
         private readonly HttpClient _httpClient;
+        private readonly ReposManagerContext _context;
 
-        public ReposReadRepository(HttpClient httpClient)
+        public ReposReadRepository(HttpClient httpClient, ReposManagerContext context)
         {
             _httpClient = httpClient;
+            _context = context;
+        }
+
+        public async Task<bool> ExistsFavoriteRepoByIdAsync(long id)
+        {
+            return await _context.Repos.AnyAsync(e => e.Id == id);
         }
 
         public async Task<GetRepoByNameGitHubResponse> GetByRepositoryByNameAsync(string repoName, int page, int perPage, ERepoSortBy? sortBy)
