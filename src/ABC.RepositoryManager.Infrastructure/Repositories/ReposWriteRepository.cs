@@ -2,11 +2,7 @@
 using ABC.RepositoryManager.Domain.Entities;
 using ABC.RepositoryManager.Domain.Enums;
 using ABC.RepositoryManager.Infrastructure.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ABC.RepositoryManager.Infrastructure.Repositories
 {
@@ -35,6 +31,15 @@ namespace ABC.RepositoryManager.Infrastructure.Repositories
                 return ERepoCreationStatus.Failure;
 
             return ERepoCreationStatus.Success;
+        }
+
+        public async Task<bool> DeleteFavoriteRepo(int id)
+        {
+            var deletedCount = await _context.Repos
+                 .Where(d => d.Id == id)
+                 .ExecuteDeleteAsync();
+
+            return deletedCount > 0;
         }
     }
 }

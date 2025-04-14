@@ -6,5 +6,6 @@ namespace ABC.RepositoryManager.Application.Contracts
     public interface IReposWriteRepository
     {
         Task<ERepoCreationStatus> CreateFavoriteRepo(Repo repository);
+        Task<bool> DeleteFavoriteRepo(int id);
     }
 }
