@@ -28,6 +28,10 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Queries.GetRep
             if (response is null || response.Repositories.Count == 0)
                 return Result<GetRepoByNameQueryResponse>.NotFound("No repositories found.");
 
+            var externalRepoIds = response.Repositories.Select(r => r.Id).ToList();
+
+            var favoriteRepoIds = await _repository.GetFavoriteRepositoriesAsync(externalRepoIds);
+
             var repositories = response.Repositories.Select(repo => new Repo
             {
                 Id = repo.Id,
@@ -38,7 +42,8 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Queries.GetRep
                 Owner = repo.Owner.Login,
                 Stargazers = repo.StargazersCount,
                 Forks = repo.ForksCount,
-                Watchers = repo.WatchersCount
+                Watchers = repo.WatchersCount,
+                Favorited = favoriteRepoIds.Contains(repo.Id)
             }).ToList();
 
             var result = new GetRepoByNameQueryResponse(

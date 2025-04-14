@@ -17,6 +17,7 @@ namespace ABC.RepositoryManager.Domain.Entities
         public int Stargazers { get; set; }
         public int Forks { get; set; }
         public int Watchers { get; set; }
+        public bool Favorited { get; set; }
 
         public const int MAX_LENGHT = 39;
 

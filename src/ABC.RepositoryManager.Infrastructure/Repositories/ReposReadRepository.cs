@@ -134,6 +134,14 @@ namespace ABC.RepositoryManager.Infrastructure.Repositories
             return await _context.Repos.CountAsync();
         }
 
+        public async Task<List<long>> GetFavoriteRepositoriesAsync(List<long> externalRepoIds)
+        {
+            return await _context.Repos
+                .Where(r => externalRepoIds.Contains(r.Id))
+                .Select(r => r.Id)
+                .ToListAsync();
+        }
+
         private int ExtractLastPageNumber(string linkHeader, int currentPage)
         {
             if (string.IsNullOrWhiteSpace(linkHeader))

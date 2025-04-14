@@ -10,5 +10,6 @@ namespace ABC.RepositoryManager.Application.Contracts
         Task<bool> ExistsFavoriteRepoByIdAsync(long id);
         Task<int> GetFavoriteReposCountAsync();
         Task<List<Repo>> GetFavoriteReposAsync(int page, int perPage, ERepoSortBy? SortBy);
+        Task<List<long>> GetFavoriteRepositoriesAsync(List<long> externalRepoIds);
     }
 }
