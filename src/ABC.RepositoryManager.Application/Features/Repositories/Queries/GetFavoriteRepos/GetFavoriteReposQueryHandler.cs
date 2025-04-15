@@ -27,7 +27,7 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Queries.GetFav
             var repositorieCount = await _repository.GetFavoriteReposCountAsync();
 
             int totalPages = (int)Math.Ceiling((double)repositorieCount / request.perPage);
-            int page = request.page > totalPages ? totalPages : request.page;
+            int page = totalPages == 0 ? 1 : Math.Min(request.page, totalPages);
 
             var repositories = await _repository.GetFavoriteReposAsync(page, request.perPage, request.SortBy);
 
