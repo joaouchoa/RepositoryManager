@@ -20,6 +20,7 @@ export class RepoListComponent {
   sortBy: number | null = null;
   errorMessage = '';
   apiErrors: string[] = [];
+  isLoading = false;
 
   constructor(private repoService: RepoService) {}
 
@@ -47,23 +48,50 @@ export class RepoListComponent {
   }
 
   toggleFavorite(repo: Repo): void {
+    if (this.isLoading) return;
+    this.isLoading = true;
+  
     if (repo.favorited) {
-      return;
+      this.repoService.removeFavoriteRepo(repo.id).subscribe({
+        next: () => {
+          repo.favorited = false;
+          this.apiErrors = [];
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.apiErrors = [];
+  
+          if (err.status === 400 && Array.isArray(err.error)) {
+            this.apiErrors = err.error;
+          } else if (err.status === 404 && typeof err.error === 'string') {
+            this.apiErrors.push(err.error);
+          } else {
+            this.apiErrors.push('Failed to remove repository from favorites.');
+          }
+  
+          this.isLoading = false;
+        }
+      });
+    } else {
+      this.repoService.favoriteRepo(repo).subscribe({
+        next: () => {
+          repo.favorited = true;
+          this.apiErrors = [];
+          this.isLoading = false;
+        },
+        error: () => {
+          this.apiErrors = ['Failed to favorite the repository.'];
+          this.isLoading = false;
+        }
+      });
     }
-  
-    this.repoService.favoriteRepo(repo).subscribe({
-      next: () => {
-        repo.favorited = true;
-      },
-      error: () => {
-        this.apiErrors = ['Failed to favorite the repository.'];
-      }
-    });
   }
-  
+
   private searchRepos(resetPage: boolean = true, targetPage: number = 1): void {
     if (resetPage) targetPage = 1;
-  
+
+    this.isLoading = true;
+
     this.repoService.searchRepos(this.repoName, targetPage, this.perPage, this.sortBy)
       .subscribe({
         next: (res) => {
@@ -71,24 +99,21 @@ export class RepoListComponent {
           this.finalPage = res.finalPage;
           this.page = targetPage;
           this.apiErrors = [];
+          this.isLoading = false;
         },
         error: (err) => {
           this.apiErrors = [];
-        
+
           if (err.status === 400 && Array.isArray(err.error)) {
             this.apiErrors = err.error;
-            return;
-          }
-        
-          if (err.status === 404 && typeof err.error === 'string') {
+          } else if (err.status === 404 && typeof err.error === 'string') {
             this.apiErrors.push(err.error);
-            return;
+          } else {
+            this.apiErrors.push('An unexpected error occurred. Please try again later.');
           }
-        
-          this.apiErrors.push('An unexpected error occurred. Please try again later.');
+
+          this.isLoading = false;
         }
-                
       });
   }
 }
-

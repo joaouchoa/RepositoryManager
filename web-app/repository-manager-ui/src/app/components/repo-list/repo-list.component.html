@@ -1,4 +1,7 @@
 <div class="container">
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
     <div class="repo-filters">
         <div class="form-group">
             <label for="repoName">Repository name</label>

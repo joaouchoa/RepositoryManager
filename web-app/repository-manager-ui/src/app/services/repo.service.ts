@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Repo } from '../models/repo.model';
-
+import { map } from 'rxjs/operators';
 
 interface SearchResponse {
   finalPage: number;
@@ -39,5 +39,11 @@ export class RepoService {
   }
   favoriteRepo(repo: Repo): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/favorite`, repo);
-  }  
+  }
+  removeFavoriteRepo(id: number): Observable<void> {
+    return this.http.request('DELETE', `${this.baseUrl}/remove-favorite`, {
+      body: { id },
+      responseType: 'text' as const
+    }).pipe(map(() => undefined));  
+  }
 }
