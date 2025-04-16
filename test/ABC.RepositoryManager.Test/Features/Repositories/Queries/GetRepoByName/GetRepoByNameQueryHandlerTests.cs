@@ -75,7 +75,7 @@ namespace ABC.RepositoryManager.Test.Features.Repositories.Queries.GetRepoByName
         }
 
         [Fact]
-        public async Task Handle_Should_Return_NotFound_When_No_Repositories_Found()
+        public async Task Handle_Should_Return_OK_When_No_Repositories_Found()
         {
             // Arrange
             var query = new GetRepoByNameQuery("EmptyRepo", 1, 10, null);
@@ -87,8 +87,8 @@ namespace ABC.RepositoryManager.Test.Features.Repositories.Queries.GetRepoByName
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
-            result.Resultado.Should().BeNull();
+            result.StatusCode.Should().Be(HttpStatusCode.OK);
+            result.Resultado.Repositories.Should().BeEmpty();
         }
 
         [Fact]
