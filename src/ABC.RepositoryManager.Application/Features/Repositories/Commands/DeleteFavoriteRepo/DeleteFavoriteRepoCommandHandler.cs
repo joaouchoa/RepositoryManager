@@ -31,7 +31,7 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Commands.Delet
             if (!response)
                 return Result.NotFound(ValidationMessages.RepoValidationMessages.FAVORITE_REPO_DONT_DELETED_ERROR_MESSAGE);
 
-            return Result.NoContent();
+            return Result.Sucess();
         }
     }
 }

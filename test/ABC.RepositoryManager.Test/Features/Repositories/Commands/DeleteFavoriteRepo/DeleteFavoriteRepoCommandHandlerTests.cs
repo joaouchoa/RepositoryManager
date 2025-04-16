@@ -26,7 +26,7 @@ namespace ABC.RepositoryManager.Test.Features.Repositories.Commands.DeleteFavori
         }
 
         [Fact]
-        public async Task Handle_Should_Return_NoContent_When_Deletion_Is_Successful()
+        public async Task Handle_Should_Return_Sucess_When_Deletion_Is_Successful()
         {
             // Arrange
             var command = new DeleteFavoriteRepoCommand(123);
@@ -37,7 +37,7 @@ namespace ABC.RepositoryManager.Test.Features.Repositories.Commands.DeleteFavori
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            result.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]
