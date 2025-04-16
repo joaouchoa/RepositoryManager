@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Repo } from '../models/repo.model';
 
+
 interface SearchResponse {
   finalPage: number;
   repositories: Repo[];
@@ -23,7 +24,17 @@ export class RepoService {
       if (sortBy !== null && sortBy !== undefined) {
         params = params.set('SortBy', sortBy);
       }
-      
+
     return this.http.get<SearchResponse>(`${this.baseUrl}/search`, { params });
+  }
+  getFavoriteRepos(page: number, perPage: number, sortBy: number | null) {
+    const params: any = { page, perPage };
+    if (sortBy !== null) {
+      params.sortBy = sortBy;
+    }
+  
+    return this.http.get<SearchResponse>(`${this.baseUrl}/favorite-repositories`, {
+      params
+    });
   }
 }
