@@ -56,13 +56,15 @@ export class RepoListComponent {
 
       try {
         const parsed = JSON.parse(err.error);
-        this.apiErrors = Array.isArray(parsed) ? parsed : [parsed.toString()];
+        const parsedErrors = Array.isArray(parsed) ? parsed : [parsed.toString()];
+        this.apiErrors = [...parsedErrors, 'Please refresh the page to update the list.'];        
       } catch {
         if (typeof err.error === 'string') {
           this.apiErrors.push(err.error);
         } else {
           this.apiErrors.push('Failed to remove repository from favorites.');
         }
+        this.apiErrors.push('Please refresh the page to update the list.');
       }
 
       this.isLoading = false;
