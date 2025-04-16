@@ -23,7 +23,6 @@ namespace ABC.RepositoryManager.Infrastructure.Config
                 .IsRequired();
 
             builder.Property(x => x.Description)
-                .IsRequired()
                 .HasColumnType("TEXT");
 
             builder.Property(x => x.Language)
