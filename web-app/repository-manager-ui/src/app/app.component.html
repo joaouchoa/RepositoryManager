@@ -1,1 +1,14 @@
-<router-outlet></router-outlet>
+<div class="layout">
+    <aside class="sidebar">
+      <h3>Menu</h3>
+      <ul>
+        <li><a routerLink="/" routerLinkActive="active-link">Search Repositories</a></li>
+        <li><a routerLink="/favorites" routerLinkActive="active-link">Favorite Repositories</a></li>
+      </ul>
+    </aside>
+  
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  
