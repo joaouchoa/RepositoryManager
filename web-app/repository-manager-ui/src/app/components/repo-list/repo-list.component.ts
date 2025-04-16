@@ -21,16 +21,19 @@ export class RepoListComponent {
   errorMessage = '';
   apiErrors: string[] = [];
   isLoading = false;
+  hasSearched = false;
 
   constructor(private repoService: RepoService) {}
 
   search(): void {
+    this.hasSearched = true;
+  
     if (!this.repoName.trim()) {
       this.errorMessage = 'Please enter a repository name.';
       this.apiErrors = [];
       return;
     }
-
+  
     this.errorMessage = '';
     this.searchRepos(true);
   }
@@ -107,18 +110,15 @@ export class RepoListComponent {
         },
         error: (err) => {
           this.apiErrors = [];
-
-          try {
-            const parsed = JSON.parse(err.error);
-            this.apiErrors = Array.isArray(parsed) ? parsed : [parsed.toString()];
-          } catch {
-            if (typeof err.error === 'string') {
-              this.apiErrors.push(err.error);
-            } else {
-              this.apiErrors.push('An unexpected error occurred. Please try again later.');
-            }
+        
+          if (err.status === 400 && Array.isArray(err.error)) {
+            this.apiErrors = err.error;
+          } else if (typeof err.error === 'string') {
+            this.apiErrors.push(err.error);
+          } else {
+            this.apiErrors.push('An unexpected error occurred. Please try again later.');
           }
-
+        
           this.isLoading = false;
         }
       });
