@@ -26,7 +26,6 @@ namespace ABC.RepositoryManager.Infrastructure.Config
                 .HasColumnType("TEXT");
 
             builder.Property(x => x.Language)
-                .IsRequired()
                 .HasMaxLength(50);
 
             builder.Property(x => x.Stargazers)
