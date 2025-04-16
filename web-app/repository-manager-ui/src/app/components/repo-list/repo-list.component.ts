@@ -50,7 +50,24 @@ export class RepoListComponent {
   toggleFavorite(repo: Repo): void {
     if (this.isLoading) return;
     this.isLoading = true;
-  
+
+    const onError = (err: any) => {
+      this.apiErrors = [];
+
+      try {
+        const parsed = JSON.parse(err.error);
+        this.apiErrors = Array.isArray(parsed) ? parsed : [parsed.toString()];
+      } catch {
+        if (typeof err.error === 'string') {
+          this.apiErrors.push(err.error);
+        } else {
+          this.apiErrors.push('Failed to remove repository from favorites.');
+        }
+      }
+
+      this.isLoading = false;
+    };
+
     if (repo.favorited) {
       this.repoService.removeFavoriteRepo(repo.id).subscribe({
         next: () => {
@@ -58,19 +75,7 @@ export class RepoListComponent {
           this.apiErrors = [];
           this.isLoading = false;
         },
-        error: (err) => {
-          this.apiErrors = [];
-  
-          if (err.status === 400 && Array.isArray(err.error)) {
-            this.apiErrors = err.error;
-          } else if (err.status === 404 && typeof err.error === 'string') {
-            this.apiErrors.push(err.error);
-          } else {
-            this.apiErrors.push('Failed to remove repository from favorites.');
-          }
-  
-          this.isLoading = false;
-        }
+        error: onError
       });
     } else {
       this.repoService.favoriteRepo(repo).subscribe({
@@ -79,10 +84,7 @@ export class RepoListComponent {
           this.apiErrors = [];
           this.isLoading = false;
         },
-        error: () => {
-          this.apiErrors = ['Failed to favorite the repository.'];
-          this.isLoading = false;
-        }
+        error: onError
       });
     }
   }
@@ -104,12 +106,15 @@ export class RepoListComponent {
         error: (err) => {
           this.apiErrors = [];
 
-          if (err.status === 400 && Array.isArray(err.error)) {
-            this.apiErrors = err.error;
-          } else if (err.status === 404 && typeof err.error === 'string') {
-            this.apiErrors.push(err.error);
-          } else {
-            this.apiErrors.push('An unexpected error occurred. Please try again later.');
+          try {
+            const parsed = JSON.parse(err.error);
+            this.apiErrors = Array.isArray(parsed) ? parsed : [parsed.toString()];
+          } catch {
+            if (typeof err.error === 'string') {
+              this.apiErrors.push(err.error);
+            } else {
+              this.apiErrors.push('An unexpected error occurred. Please try again later.');
+            }
           }
 
           this.isLoading = false;

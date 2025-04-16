@@ -1,4 +1,8 @@
 <div class="container">
+    <div class="loading-backdrop" *ngIf="isLoading">
+      <div class="spinner"></div>
+    </div>
+
     <div class="repo-filters">
         <div class="form-group">
             <label for="sortBy">Sort by</label>
@@ -56,8 +60,8 @@
   
         <div class="repo-actions">
           <a [href]="repo.url" target="_blank">View on GitHub</a>
-          <button (click)="toggleFavorite(repo)">
-            {{ repo.favorited ? 'Unfavorite' : 'Favorite' }}
+          <button (click)="toggleFavorite(repo)" [disabled]="isLoading">
+            Unfavorite
           </button>
         </div>
       </div>
