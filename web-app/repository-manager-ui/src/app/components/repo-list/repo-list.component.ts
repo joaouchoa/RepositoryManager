@@ -47,9 +47,20 @@ export class RepoListComponent {
   }
 
   toggleFavorite(repo: Repo): void {
-    repo.favorited = !repo.favorited;
+    if (repo.favorited) {
+      return;
+    }
+  
+    this.repoService.favoriteRepo(repo).subscribe({
+      next: () => {
+        repo.favorited = true;
+      },
+      error: () => {
+        this.apiErrors = ['Failed to favorite the repository.'];
+      }
+    });
   }
-
+  
   private searchRepos(resetPage: boolean = true, targetPage: number = 1): void {
     if (resetPage) targetPage = 1;
   

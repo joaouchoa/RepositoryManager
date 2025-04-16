@@ -37,4 +37,7 @@ export class RepoService {
       params
     });
   }
+  favoriteRepo(repo: Repo): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/favorite`, repo);
+  }  
 }
