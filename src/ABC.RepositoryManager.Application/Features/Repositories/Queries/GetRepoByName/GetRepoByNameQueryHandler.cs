@@ -25,7 +25,7 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Queries.GetRep
 
             var response = await _repository.GetByRepositoryByNameAsync(request.RepoName, request.Page, request.PerPage, request.SortBy);
 
-            if (response is null || response.Repositories.Count == 0)
+            if (response is null )
                 return Result<GetRepoByNameQueryResponse>.NotFound("No repositories found.");
 
             var externalRepoIds = response.Repositories.Select(r => r.Id).ToList();

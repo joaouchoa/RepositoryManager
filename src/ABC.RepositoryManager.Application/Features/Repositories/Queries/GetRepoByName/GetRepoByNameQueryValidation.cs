@@ -8,7 +8,8 @@ namespace ABC.RepositoryManager.Application.Features.Repositories.Queries.GetRep
         public GetRepoByNameQueryValidation()
         {
             RuleFor(d => d.RepoName)
-                .NotEmpty().WithMessage(RepoValidationMessages.NOT_EMPTY_ERROR_MESSAGE);
+                .NotEmpty().WithMessage(RepoValidationMessages.NOT_EMPTY_ERROR_MESSAGE)
+                .MaximumLength(256).WithMessage(RepoValidationMessages.MAX_LENGTH_ERROR_MESSAGE);
 
             RuleFor(d => d.Page)
                 .NotEmpty().WithMessage(RepoValidationMessages.NOT_EMPTY_ERROR_MESSAGE)

@@ -1,4 +1,3 @@
-
 using ABC.RepositoryManager.API.Middlewares;
 using ABC.RepositoryManager.API.Setup;
 
@@ -11,13 +10,20 @@ namespace ABC.RepositoryManager.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddApiConfig(builder.Configuration);
             builder.Services.AddHttpClient();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    policy => policy
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
 
             var app = builder.Build();
 
@@ -27,12 +33,14 @@ namespace ABC.RepositoryManager.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors("AllowAll");
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
