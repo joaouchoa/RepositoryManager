@@ -144,7 +144,7 @@ Acesse: `http://localhost:4200`
 
 ## 💡 Autor
 👨‍💻 João de Deus Uchôa  
-📧 [LinkedIn](https://www.linkedin.com/in/joaoudeuchoa)
+📧 [LinkedIn](https://www.linkedin.com/in/joaouuchoa1)
 
 ---
 
