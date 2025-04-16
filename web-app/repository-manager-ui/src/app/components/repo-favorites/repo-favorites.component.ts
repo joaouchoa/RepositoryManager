@@ -53,23 +53,34 @@ export class RepoFavoritesComponent implements OnInit {
       next: () => {
         this.apiErrors = [];
         this.repos = this.repos.filter(r => r.id !== repo.id);
+
+        if (this.repos.length === 0 && this.page > 1) {
+          this.page--;
+        }
+
+        this.searchRepos(false, this.page);
+  
         this.isLoading = false;
       },
       error: (err) => {
         this.apiErrors = [];
   
-        if (err.status === 400 && Array.isArray(err.error)) {
-          this.apiErrors = err.error;
-        } else if (err.status === 404 && typeof err.error === 'string') {
-          this.apiErrors.push(err.error);
-        } else {
-          this.apiErrors.push('Failed to remove repository from favorites.');
+        try {
+          const parsed = JSON.parse(err.error);
+          this.apiErrors = Array.isArray(parsed) ? parsed : [parsed.toString()];
+        } catch {
+          if (typeof err.error === 'string') {
+            this.apiErrors.push(err.error);
+          } else {
+            this.apiErrors.push('Failed to remove repository from favorites.');
+          }
         }
   
         this.isLoading = false;
       }
     });
-  }  
+  }
+   
 
   private searchRepos(resetPage: boolean = true, targetPage: number = 1): void {
     if (resetPage) targetPage = 1;
