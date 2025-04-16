@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace ABC.RepositoryManager.Domain.Entities
         public int Stargazers { get; set; }
         public int Forks { get; set; }
         public int Watchers { get; set; }
+
+        [NotMapped]
         public bool Favorited { get; set; }
 
         public const int MAX_LENGHT = 39;
